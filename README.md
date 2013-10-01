@@ -1,13 +1,18 @@
-# grunt-concat-properties
+## grunt-concat-properties
 
-> Grunt plugin for concating JavaScript models methods or attributes from many files
+#### Grunt plugin for concating JavaScript models methods or attributes from many files
 
-```js
-"View/init.js" 
-"View/firstMethod.js"    -->    "View.js"
-"View/secondMethod.js"
+```
+ View/init.js
+ View/firstMethod.js     -->    View.js
+ View/secondMethod.js
+ ...
 ```
 
+* <a href="#usage-example">Usage Example</a>
+* <a href="#how-to-start">How to start</a>
+* <a href="#advantage-configuring">Advantage configuring</a>
+* <a href="#recommendations">Recommendations</a>
 
 ___
 ### Usage Example
