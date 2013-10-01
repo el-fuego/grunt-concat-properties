@@ -8,10 +8,10 @@
 module.exports = function (grunt) {
     'use strict';
 
-    var utils = require('utils'),
-        propertiesUtils = require('properties_utils'),
-        patterns = require('patterns'),
-        paths = require('paths'),
+    var utils = require('./utils.js'),
+        propertiesUtils = require('./properties_utils.js'),
+        patterns = require('./patterns.js'),
+        paths = require('./paths.js'),
         options;
 
     /**
@@ -32,7 +32,10 @@ module.exports = function (grunt) {
 
         grunt.file.expand(options.initFiles).forEach(function (path) {
 
-            objectName = paths.getObjectNameByInitFile(path);
+            objectName = paths.getObjectNameByInitFile(path.replace(
+                new RegExp('^' + utils.toRegExpText(options.base.replace(/^\.\//, ''))),
+                ''
+            ).replace(/^\/+/, ''));
 
             groups[path] = {
                 objectName: objectName,
@@ -65,7 +68,7 @@ module.exports = function (grunt) {
             return;
         }
 
-        grunt.log.writeln(sourceData[2]);
+        grunt.log.ok(sourceData[2]);
 
         // generate property data
         propertyDefinitionWithoutObjectName = sourceData[2].replace(propertiesGroups[groupName].pattern, '').replace(/^\./, '');
@@ -87,24 +90,26 @@ module.exports = function (grunt) {
 
     /**
      * Read methods from src files
+     * @param src
      * @param currentOptions
      * @returns {{}}
      */
-    return function (currentOptions) {
-        var propertiesGroups = getPropertiesGroupsData(currentOptions),
+    return function (src, currentOptions) {
+        options = currentOptions;
+
+        var propertiesGroups = getPropertiesGroupsData(),
             sourceData,
             text;
 
-        options = currentOptions;
 
-        grunt.file.expand(options.src).forEach(function (filePath) {
+        src.forEach(function (filePath) {
 
             // find each property at each src file
             text = grunt.file.read(filePath, {encoding: 'utf8'});
             while ((sourceData = patterns.propertiesPattern.exec(text))) {
 
                 // remove only current property text
-                text = text.replace(patterns.propertiesPattern, '$5');
+                text = text.replace(patterns.propertiesPattern, '$4');
 
                 addProperty(sourceData, propertiesGroups, filePath);
             }

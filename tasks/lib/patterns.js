@@ -11,7 +11,7 @@ module.exports = {
      * Pattern for properties places search
      */
     placesPatterns: {
-        'prototype': /([^\s{])?(?:\s*\n)?([\t ]*)\/\/\s*@include\s+rototypeProperties/i,
+        'prototype': /([^\s{])?(?:\s*\n)?([\t ]*)\/\/\s*@include\s+prototypeProperties/i,
         'inline':    /([^\s{])?(?:\s*\n)?([\t ]*)\/\/\s*@include\s+properties/i
     },
 
@@ -34,15 +34,15 @@ module.exports = {
         // start of file or previous property definition
         '(?:\\n|^)' +
             // comment before property
-            '([ \\t]*(?:\\/\\*(?:.|\\s)*?\\*\\/|(?:\\/\\/[^\\n]*\\n)*)\\s*)?' + // $1
+            '([ \\t]*?(?:\\/\\*(?:.|\\s)*?\\*\\/|(?:\\/\\/[^\\n]*\\n)*)\\s*)?' + // $1
             // application name
             '(?:[a-z0-9_]+)\\.' +
             // property definition
             '([a-z0-9_\\.]+)\\s*=\\s*' +  // $2
             // content
             '((?:.|\\s)+?)' +  // $3
-            // end of file or next property definition
-            '(\\n+[a-z_]|\\n*$)', // $4
+            // end of file, next property definition or comment
+            '(\\n+[a-z_\\/]|\\n*$)', // $4
         'i'
     )
 };

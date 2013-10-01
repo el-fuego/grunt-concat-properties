@@ -6,47 +6,82 @@
  * Licensed under the MIT license.
  */
 
-'use strict';
 
 module.exports = function (grunt) {
+    'use strict';
 
     // Project configuration.
     grunt.initConfig({
         jshint: {
-            all: [
-                'Gruntfile.js',
-                'tasks/*.js',
-                '<%= nodeunit.tests %>'
-            ],
             options: {
                 jshintrc: '.jshintrc'
+            },
+            project: [
+                'Gruntfile.js',
+                'tasks/{**/,}*.js',
+                'test/*.js',
+                'test/App/{**/,}*.js',
+                '<%= nodeunit.tests %>'
+            ],
+            appTest: {
+                src: 'test/App/build/properties.js'
             }
         },
 
         // Before generating any new files, remove any previously-created files.
         clean: {
-            tests: ['tmp']
+            appTest: ['test/App/build/*']
         },
 
         // Configuration to be run (and then tested).
         concatProperties: {
-            heart:      {
-                indentation: '     ',
-                initFiles: [
-                    '**/init.js',
-                    '!init.js'
-                ],
+            appTest:      {
+                options: {
+                    indentation: '    ',
+                    base: 'test/App/',
+                    initFiles: [
+                        'test/App/**/init.js',
+                        '!test/App/init.js'
+                    ]
+                },
+
                 src:  [
-                    '{**/,}*.js',
-                    '!{**/,}init.js'
+                    'test/App/models/{**/,}*.js',
+                    'test/App/View/{**/,}*.js',
+                    '!test/App/{**/,}init.js'
                 ],
-                dest: 'build/properties.js'
+                dest: 'test/App/build/properties.js'
+            }
+        },
+
+        jsbeautifier: {
+            files: ["test/App/build/properties.js"],
+            options: {
+                js: {
+                    braceStyle:              "collapse",
+                    breakChainedMethods:     false,
+                    e4x:                     false,
+                    evalCode:                false,
+                    indentChar:              " ",
+                    indentLevel:             0,
+                    indentSize:              4,
+                    indentWithTabs:          false,
+                    jslintHappy:             false,
+                    keepArrayIndentation:    false,
+                    keepFunctionIndentation: false,
+                    maxPreserveNewlines:     10,
+                    preserveNewlines:        true,
+                    spaceBeforeConditional:  true,
+                    spaceInParen:            false,
+                    unescapeStrings:         false,
+                    wrapLineLength:          0
+                }
             }
         },
 
         // Unit tests.
         nodeunit: {
-            tests: ['test/*_test.js']
+            tests: ['test/*.js']
         }
 
     });
@@ -56,14 +91,15 @@ module.exports = function (grunt) {
 
     // These plugins provide necessary tasks.
     grunt.loadNpmTasks('grunt-contrib-jshint');
+    grunt.loadNpmTasks('grunt-jsbeautifier');
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-nodeunit');
 
     // Whenever the "test" task is run, first clean the "tmp" dir, then run this
     // plugin's task(s), then test the result.
-    grunt.registerTask('test', ['clean', 'concatProperties', 'nodeunit']);
+    grunt.registerTask('test', ['clean', 'concatProperties', 'jsbeautifier', 'jshint:appTest', 'nodeunit']);
 
     // By default, lint and run all tests.
-    grunt.registerTask('default', ['jshint', 'test']);
+    grunt.registerTask('default', ['jshint:project', 'test']);
 
 };

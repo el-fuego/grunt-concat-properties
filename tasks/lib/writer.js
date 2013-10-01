@@ -8,8 +8,8 @@
 module.exports = function (grunt) {
     'use strict';
 
-    var utils = require('utils'),
-        patterns = require('patterns'),
+    var utils = require('./utils.js'),
+        patterns = require('./patterns.js'),
         options;
 
 
@@ -69,7 +69,7 @@ module.exports = function (grunt) {
             );
         }
 
-        return '{\n' + options.indentation + properties.join(',\n\n' + options.indentation) + '\n}';
+        return '{\n' + properties.join(',\n\n') + '\n}';
     }
 
     /**
@@ -104,7 +104,7 @@ module.exports = function (grunt) {
     function concatProperties(properties) {
         return (
             stringifyJSONProperties(propertiesToJSON(properties))
-            .replace(new RegExp('^\\{\\n' + options.indentation + '|\\n\\}$', 'g'), '')
+            .replace(new RegExp('^\\{\\n' + '|\\n\\}$', 'g'), '')
         );
     }
 
@@ -126,8 +126,8 @@ module.exports = function (grunt) {
 
         // Can`t find properties place
         if (!matchedData) {
-            grunt.log.write("No " + (properties[0].isFromPrototype ? "prototype" : "inline") + " properties place definition at " + filePath +
-                '   (properties: ' + properties.map(function (p) {return p.name + ' at ' + p.filePath; }).join(', ') + ')   ').error();
+            grunt.log.error("No " + (properties[0].isFromPrototype ? "prototype" : "inline") + " properties place definition at " + filePath +
+                '   (properties: ' + properties.map(function (p) {return p.name + ' at ' + p.filePath; }).join(', ') + ')');
 
             return text;
         }
@@ -142,10 +142,11 @@ module.exports = function (grunt) {
 
     /**
      * Write properties and initializators to dest file
+     * @param dest
      * @param properties
      * @param currentOptions
      */
-    return function (propertiesGroups, currentOptions) {
+    return function (dest, propertiesGroups, currentOptions) {
 
         var initFilePath,
             initFileText,
@@ -161,7 +162,7 @@ module.exports = function (grunt) {
             // read init file
             initFileText = grunt.file.read(initFilePath, {encoding: 'utf8'});
             if (!initFileText) {
-                grunt.log.write("File " + initFilePath + " is empty or unreadable   ").error();
+                grunt.log.error("File " + initFilePath + " is empty or unreadable");
                 continue;
             }
 
@@ -181,6 +182,7 @@ module.exports = function (grunt) {
             propertiesFileText += initFileText + '\n\n';
 
         }
-        grunt.file.write(options.dest, propertiesFileText);
+        grunt.file.write(dest, propertiesFileText);
+        grunt.log.write(dest).ok();
     };
 };

@@ -8,35 +8,29 @@
 module.exports = function (grunt) {
     'use strict';
 
-    var getPropertiesGroups = require('reader.js'),
-        writeFiles = require('writer.js'),
-        defaultOptions = {
-            indentation: '     ',
-            sourceProcessor: null,
-            initFiles: [
-                '**/init.js',
-                '!init.js'
-            ],
-            src:  [
-                '{**/,}*.js',
-                '!{**/,}init.js'
-            ],
-            dest: 'build/properties.js'
-        };
 
+    grunt.registerMultiTask('concatProperties', 'Concat JavaScript models methods or attributes from many files', function () {
 
-    grunt.registerTask('concatProperties', function (optionsSection) {
+        var getPropertiesGroups = require('./lib/reader.js')(grunt),
+            writeFiles = require('./lib/writer.js')(grunt),
+            defaultOptions = {
+                indentation: '     ',
+                base: '',
+                sourceProcessor: null,
+                initFiles: [
+                    '**/init.js',
+                    '!init.js'
+                ]
+            },
+            options = this.options(defaultOptions);
 
-        var i,
-            options = grunt.config('concatProperties.' + optionsSection),
-            properties = getPropertiesGroups(options);
+        this.files.forEach(function (file) {
 
-        for (i in defaultOptions) {
-            if (!options[i]) {
-                options[i] = defaultOptions[i];
-            }
-        }
+            writeFiles(
+                file.dest,
+                getPropertiesGroups(file.src, options),
+                options);
+        });
 
-        writeFiles(properties, options);
     });
 };

@@ -1,6 +1,6 @@
 # grunt-concat-properties
 
-> Grunt plugin for concating JavaScript models methods from many files
+> Grunt plugin for concating JavaScript models methods or attributes from many files
 
 ### Usage Examples
 

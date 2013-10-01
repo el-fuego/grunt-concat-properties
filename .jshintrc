@@ -1,0 +1,13 @@
+{
+    "curly":    true,
+    "eqnull":   true,
+    "eqeqeq":   true,
+    "undef":    true,
+    "multistr": true,
+    "globals":  {
+        "require": true,
+        "App":     true,
+        "module":  true,
+        "exports": true
+    }
+}
