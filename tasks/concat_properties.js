@@ -14,7 +14,6 @@ module.exports = function (grunt) {
         var getPropertiesGroups = require('./lib/reader.js')(grunt),
             writeFiles = require('./lib/writer.js')(grunt),
             defaultOptions = {
-                indentation: '     ',
                 base: '',
                 sourceProcessor: null,
                 initFiles: [

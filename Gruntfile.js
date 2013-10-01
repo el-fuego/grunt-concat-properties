@@ -38,7 +38,6 @@ module.exports = function (grunt) {
         concatProperties: {
             appTest:      {
                 options: {
-                    indentation: '    ',
                     base: 'test/App/',
                     initFiles: [
                         'test/App/**/init.js',
