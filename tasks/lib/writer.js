@@ -143,27 +143,25 @@ module.exports = function (grunt) {
     /**
      * Write properties and initializators to dest file
      * @param dest
-     * @param properties
+     * @param propertiesGroups [{Object}]
      * @param currentOptions
      */
     return function (dest, propertiesGroups, currentOptions) {
 
-        var initFilePath,
-            initFileText,
-            propertiesFileText = '',
-            objectData;
+        var propertiesFileText = '';
 
         options = currentOptions;
 
         // get each init file path and its objectName
-        for (initFilePath in propertiesGroups) {
-            objectData = propertiesGroups[initFilePath];
+        propertiesGroups.forEach(function (objectData) {
+
+            var initFileText;
 
             // read init file
-            initFileText = grunt.file.read(initFilePath, {encoding: 'utf8'});
+            initFileText = grunt.file.read(objectData.initFilePath, {encoding: 'utf8'});
             if (!initFileText) {
-                grunt.log.error("File " + initFilePath + " is empty or unreadable");
-                continue;
+                grunt.log.error("File " + objectData.initFilePath + " is empty or unreadable");
+                return;
             }
 
             // paste properties to init source
@@ -171,17 +169,17 @@ module.exports = function (grunt) {
             initFileText = addPropertiesToText(
                 initFileText,
                 objectData.prototypeProperties,
-                initFilePath
+                objectData.initFilePath
             );
             // inline properties
             initFileText = addPropertiesToText(
                 initFileText,
                 objectData.inlineProperties,
-                initFilePath
+                objectData.initFilePath
             );
             propertiesFileText += initFileText + '\n\n';
 
-        }
+        });
         grunt.file.write(dest, propertiesFileText);
         grunt.log.write(dest).ok();
     };

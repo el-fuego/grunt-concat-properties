@@ -24,25 +24,28 @@ module.exports = function (grunt) {
      *      prototypeProperties: []
      *   }
      * }
-     * @returns {Object}
+     * @param src [{String}]
+     * @returns [{Object}]
      */
-    function getPropertiesGroupsData() {
-        var groups = {},
+    function getPropertiesGroupsData(src) {
+        var groups = [],
             objectName;
 
-        grunt.file.expand(options.initFiles).forEach(function (path) {
+        // intersection for restoring paths sequence
+        grunt.util._.intersection(src, grunt.file.expand(options.initFiles)).forEach(function (path) {
 
             objectName = paths.getObjectNameByInitFile(path.replace(
                 new RegExp('^' + utils.toRegExpText(options.base.replace(/^\.\//, ''))),
                 ''
             ).replace(/^\/+/, ''));
 
-            groups[path] = {
-                objectName: objectName,
-                pattern:    new RegExp('^' + utils.toRegExpText(objectName), 'i'),
-                inlineProperties: [],
+            groups.push({
+                objectName:          objectName,
+                initFilePath:        path,
+                pattern:             new RegExp('^' + utils.toRegExpText(objectName), 'i'),
+                inlineProperties:    [],
                 prototypeProperties: []
-            };
+            });
         });
 
         return groups;
@@ -52,18 +55,18 @@ module.exports = function (grunt) {
     /**
      * Add property data to their properties group
      * @param sourceData {String}
-     * @param propertiesGroups {Object}
+     * @param propertiesGroups [{Object}]
      * @param filePath {String}
      * @returns {Object}
      */
     function addProperty(sourceData, propertiesGroups, filePath) {
 
-        var groupName = propertiesUtils.getGroupName(sourceData[2], propertiesGroups),
+        var group = propertiesUtils.getGroup(sourceData[2], propertiesGroups),
             propertyName,
             data,
             propertyDefinitionWithoutObjectName;
 
-        if (!groupName) {
+        if (!group) {
             grunt.log.error('Object ' + sourceData[2] + ' without init file');
             return;
         }
@@ -71,7 +74,7 @@ module.exports = function (grunt) {
         grunt.log.ok(sourceData[2]);
 
         // generate property data
-        propertyDefinitionWithoutObjectName = sourceData[2].replace(propertiesGroups[groupName].pattern, '').replace(/^\./, '');
+        propertyDefinitionWithoutObjectName = sourceData[2].replace(group.pattern, '').replace(/^\./, '');
         propertyName = propertyDefinitionWithoutObjectName.replace(/^prototype\./i, '');
         data = {
             name:     propertyName,
@@ -84,7 +87,7 @@ module.exports = function (grunt) {
         };
 
         // add property data to prototype or inline array
-        propertiesGroups[groupName][(data.isFromPrototype ? 'prototypeProperties' : 'inlineProperties')].push(data);
+        group[(data.isFromPrototype ? 'prototypeProperties' : 'inlineProperties')].push(data);
     }
 
 
@@ -97,12 +100,11 @@ module.exports = function (grunt) {
     return function (src, currentOptions) {
         options = currentOptions;
 
-        var propertiesGroups = getPropertiesGroupsData(),
+        var propertiesGroups = getPropertiesGroupsData(src),
             sourceData,
             text;
 
-
-        src.forEach(function (filePath) {
+        grunt.util._.difference(src, grunt.file.expand(options.initFiles)).forEach(function (filePath) {
 
             // find each property at each src file
             text = grunt.file.read(filePath, {encoding: 'utf8'});

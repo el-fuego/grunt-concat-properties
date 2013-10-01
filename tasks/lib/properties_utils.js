@@ -40,15 +40,16 @@ module.exports = {
     /**
      * Find group name matched by group regexp
      * @param propertyDefinition {string} f.e. "a.b.c" // a.b.c = function(){...}
-     * @param propertiesGroups {Array}
-     * @returns {String} path
+     * @param propertiesGroups [{Object}]
+     * @returns {Object} propertiesGroup
      */
-    getGroupName: function (propertyDefinition, propertiesGroups) {
+    getGroup: function (propertyDefinition, propertiesGroups) {
 
-        var path;
-        for (path in propertiesGroups) {
-            if (propertiesGroups[path].pattern.test(propertyDefinition)) {
-                return path;
+        var i = propertiesGroups.length;
+
+        while (i--) {
+            if (propertiesGroups[i].pattern.test(propertyDefinition)) {
+                return propertiesGroups[i];
             }
         }
 

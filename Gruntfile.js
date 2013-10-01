@@ -21,7 +21,8 @@ module.exports = function (grunt) {
                 'tasks/{**/,}*.js',
                 'test/*.js',
                 'test/App/{**/,}*.js',
-                '<%= nodeunit.tests %>'
+                '<%= nodeunit.tests %>',
+                '!test/App/build/{**/,}*.js'
             ],
             appTest: {
                 src: 'test/App/build/properties.js'
@@ -47,8 +48,7 @@ module.exports = function (grunt) {
 
                 src:  [
                     'test/App/models/{**/,}*.js',
-                    'test/App/View/{**/,}*.js',
-                    '!test/App/{**/,}init.js'
+                    'test/App/View/{**/,}*.js'
                 ],
                 dest: 'test/App/build/properties.js'
             }
@@ -66,7 +66,7 @@ module.exports = function (grunt) {
                     indentLevel:             0,
                     indentSize:              4,
                     indentWithTabs:          false,
-                    jslintHappy:             false,
+                    jslintHappy:             true,
                     keepArrayIndentation:    false,
                     keepFunctionIndentation: false,
                     maxPreserveNewlines:     10,
