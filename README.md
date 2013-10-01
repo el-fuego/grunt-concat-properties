@@ -2,21 +2,29 @@
 
 > Grunt plugin for concating JavaScript models methods or attributes from many files
 
+```js
+"View/init.js" 
+"View/firstMethod.js"    -->    "View.js"
+"View/secondMethod.js"
+```
 
-### Usage Examples
+
+___
+### Usage Example
 
 ```js
 grunt.initConfig({
     concatProperties: {
         myApp: {
             src: [
-                'models/{**/,}*.js',
                 'View/{**/,}*.js'
             ],
-            dest: 'build/properties.js'
+            dest: 'build/View.js'
         }
     }
 };
+```
+
 #### src
 Type: `Array`
 Default value: `[]`
@@ -31,11 +39,18 @@ Default value: `''`
 The destination file path
 
 
-
+___
 ### How to start
 <a href="https://github.com/el-fuego/grunt-concat-properties/tree/master/test/App">Sample project structure</a>
 
-1. For each model, view or other object you need to create a folder with init.js file.
+
+##### Instalation
+
+```shell
+npm install grunt-concat-properties --save-dev
+```
+
+##### 1 For each model, view or other object you need to create a folder with init.js file.
 Example for constructor:
 ```js
 // View/init.js
@@ -43,40 +58,46 @@ MyApp.View = function () {};
 MyApp.View.prototype = {
     // @include prototypeProperties
 };
+```
 
-2. Add files with properties or groups to your object folder.
-Example:
+##### 2 Add files with properties or groups to your object folder.
 ```js
 // View/firstMethod.js
 MyApp.Model.prototype.firstMethod = function () {};
+```
 
 ```js
 // View/secondMethod.js
 MyApp.Model.prototype.secondMethod = function () {};
+```
 
-3. Run task
+##### 3 Run task
 ```shell
 grunt concatProperties
+```
 
-After you get destination file like this:
+##### Result:
 ```js
-// build/properties.js
+// build/View.js
 MyApp.View = function () {};
 MyApp.View.prototype = {
     firstMethod:  function () {},
     secondMethod: function () {}
 };
+```
 
 Also you can concat inline properties using other place definition
+
 ```js
 // @include properties
+```
 
 
 
+___
 ### Advantage configuring
 
 ```js
-
 grunt.initConfig({
     concatProperties: {
         myApp: {
@@ -97,6 +118,7 @@ grunt.initConfig({
         }
     }
 };
+```
 
 #### options.base
 Type: `String`
@@ -112,6 +134,7 @@ Default value: `null`
 The function will being called for process each property source data.
 
 For example:
+
 ```js
 /**
  * @param source {String}
@@ -127,6 +150,7 @@ For example:
 function sourceProcessor (source, propertyData) {
     return source;
 }
+```
 
 
 #### options.initFiles
@@ -153,7 +177,9 @@ grunt.initConfig({
         }
     }
 };
+```
 
 
+___
 #### Recommendations
 Use some like <a href="https://github.com/vkadam/grunt-jsbeautifier">grunt-jsbeautifier</a> to keep indentation at concated files
