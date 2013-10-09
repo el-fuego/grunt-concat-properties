@@ -21,19 +21,32 @@ var grunt = require('grunt');
 */
 
 exports.templates_concat = {
-    setUp: function(done) {
+    setUp: function (done) {
         'use strict';
 
         // setup here if necessary
         done();
     },
-    testIt: function(test) {
+
+    testApp: function (test) {
         'use strict';
 
         test.expect(1);
 
-        var actual = (grunt.file.read('test/App/build/properties.js') || '').replace(/[ \t]+/g, '');
-        var expected = (grunt.file.read('test/expected/properties.js') || '').replace(/[ \t]+/g, '');
+        var actual = (grunt.file.read('test/App/build/properties.js') || '').replace(/[ \t]+/g, ''),
+            expected = (grunt.file.read('test/expected/appProperties.js') || '').replace(/[ \t]+/g, '');
+        test.equal(actual, expected, 'Concated file isn`t like an expected');
+
+        test.done();
+    },
+
+    testSingleView: function (test) {
+        'use strict';
+
+        test.expect(1);
+
+        var actual = (grunt.file.read('test/SingleView/build/properties.js') || '').replace(/[ \t]+/g, ''),
+            expected = (grunt.file.read('test/expected/singleViewProperties.js') || '').replace(/[ \t]+/g, '');
         test.equal(actual, expected, 'Concated file isn`t like an expected');
 
         test.done();

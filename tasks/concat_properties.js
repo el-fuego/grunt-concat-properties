@@ -28,7 +28,8 @@ module.exports = function (grunt) {
             writeFiles(
                 file.dest,
                 getPropertiesGroups(file.src, options),
-                options);
+                options
+            );
         });
 
     });

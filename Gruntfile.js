@@ -21,17 +21,23 @@ module.exports = function (grunt) {
                 'tasks/{**/,}*.js',
                 'test/*.js',
                 'test/App/{**/,}*.js',
+                'test/SingleView/{**/,}*.js',
                 '<%= nodeunit.tests %>',
-                '!test/App/build/{**/,}*.js'
+                '!test/App/build/{**/,}*.js',
+                '!test/SingleView/build/{**/,}*.js'
             ],
             appTest: {
                 src: 'test/App/build/properties.js'
+            },
+            singleViewTest: {
+                src: 'test/SingleView/build/properties.js'
             }
         },
 
         // Before generating any new files, remove any previously-created files.
         clean: {
-            appTest: ['test/App/build/*']
+            appTest: ['test/App/build/*'],
+            singleViewTest: ['test/SingleView/build/*']
         },
 
         // Configuration to be run (and then tested).
@@ -50,11 +56,28 @@ module.exports = function (grunt) {
                     'test/App/View/{**/,}*.js'
                 ],
                 dest: 'test/App/build/properties.js'
+            },
+            singleViewTest:      {
+                options: {
+                    base: 'test/SingleView/',
+                    initFiles: [
+                        'test/SingleView/init.js'
+                    ]
+                },
+
+                src:  [
+                    'test/SingleView/{**/,}*.js',
+                    '!test/SingleView/build/{**/,}*'
+                ],
+                dest: 'test/SingleView/build/properties.js'
             }
         },
 
         jsbeautifier: {
-            files: ["test/App/build/properties.js"],
+            files: [
+                "test/App/build/properties.js",
+                "test/SingleView/build/properties.js"
+            ],
             options: {
                 js: {
                     braceStyle:              "collapse",
@@ -94,9 +117,25 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-nodeunit');
 
-    // Whenever the "test" task is run, first clean the "tmp" dir, then run this
-    // plugin's task(s), then test the result.
-    grunt.registerTask('test', ['clean', 'concatProperties', 'jsbeautifier', 'jshint:appTest', 'nodeunit']);
+
+    grunt.registerTask('buildAndValidateApp', [
+        'clean:appTest',
+        'concatProperties:appTest',
+        'jsbeautifier',
+        'jshint:appTest'
+    ]);
+    grunt.registerTask('buildAndValidateSingleView', [
+        'clean:singleViewTest',
+        'concatProperties:singleViewTest',
+        'jsbeautifier',
+        'jshint:singleViewTest'
+    ]);
+
+    grunt.registerTask('test', [
+        'buildAndValidateApp',
+        'buildAndValidateSingleView',
+        'nodeunit'
+    ]);
 
     // By default, lint and run all tests.
     grunt.registerTask('default', ['jshint:project', 'test']);

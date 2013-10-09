@@ -9,7 +9,7 @@
 module.exports = {
 
     // (AppName/**/ObjectName)/fileName
-    objectNameFromPathPattern: /((?:[^\/]+\/?)+)\/[^\/]+$/,
+    objectNameFromPathPattern: /(?:((?:[^\/]+\/?)+)\/)?[^\/]+?$/,
 
     /**
      * Get object name from init file path
@@ -17,6 +17,6 @@ module.exports = {
      * @returns {string} f.e. "a.B"
      */
     getObjectNameByInitFile: function (path) {
-        return this.objectNameFromPathPattern.exec(path)[1].replace(/[\\\/]+/g, '.');
+        return (this.objectNameFromPathPattern.exec(path)[1] || '').replace(/[\\\/]+/g, '.');
     }
 };

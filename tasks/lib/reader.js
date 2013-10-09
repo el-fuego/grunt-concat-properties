@@ -39,6 +39,8 @@ module.exports = function (grunt) {
                 ''
             ).replace(/^\/+/, ''));
 
+            grunt.log.writeln(objectName);
+
             groups.push({
                 objectName:          objectName,
                 initFilePath:        path,
@@ -105,6 +107,7 @@ module.exports = function (grunt) {
             text;
 
         grunt.util._.difference(src, grunt.file.expand(options.initFiles)).forEach(function (filePath) {
+
 
             // find each property at each src file
             text = grunt.file.read(filePath, {encoding: 'utf8'});
