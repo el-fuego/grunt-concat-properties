@@ -1,8 +1,8 @@
 /*
- * grunt-templates-concat
- * https://github.com/denis/grunt-templates-concat
+ * grunt-concat-properties
+ * https://github.com/denis/grunt-concat-properties
  *
- * Copyright (c) 2013 Denis Knyazevich
+ * Copyright (c) 2013 Yuriy Pulyaev
  * Licensed under the MIT license.
  */
 
