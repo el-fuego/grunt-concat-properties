@@ -23,6 +23,8 @@ module.exports = function (grunt) {
             },
             options = this.options(defaultOptions);
 
+        grunt.verbose.writeln('Initialized with options:', JSON.stringify(options));
+
         this.files.forEach(function (file) {
 
             writeFiles(
