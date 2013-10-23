@@ -1,0 +1,14 @@
+{
+    "App": {
+        "Models": {
+            "WithProperties": {
+                "prototype": {
+                    "jsonProperty": {
+                        "secondDepthProperty": null
+                    },
+                    "anotherJsonProperty": "value"
+                }
+            }
+        }
+    }
+}

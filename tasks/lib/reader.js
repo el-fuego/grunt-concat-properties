@@ -94,6 +94,79 @@ module.exports = function (grunt) {
 
 
     /**
+     * Add JSON properties values to their properties group
+     * @param jsonData {String}
+     * @param propertiesGroups [{Object}]
+     * @param filePath {String}
+     * @param currentNamesPath {String}
+     * @returns {Object}
+     */
+    function addJSONProperties(jsonData, propertiesGroups, filePath, currentNamesPath) {
+
+        var i,
+            group,
+            propertyDefinition,
+            propertyDefinitionWithoutObjectName,
+            propertyName,
+            data;
+
+        if (currentNamesPath === undefined) {
+            currentNamesPath = '';
+        }
+
+        // get all values
+        for (i in jsonData) {
+
+            // add to group if is a simply object
+            if (jsonData[i] instanceof Array || jsonData[i] == null || typeof jsonData[i] !== 'object') {
+
+                // find group
+                propertyDefinition = (currentNamesPath ? currentNamesPath + '.' + i : i)
+                    .replace(/^[^.]+\./, '');
+                group = propertiesUtils.getGroup(propertyDefinition, propertiesGroups);
+
+                if (!group) {
+                    grunt.log.error('Object ' + propertyDefinition + ' without init file');
+                    return;
+                }
+
+                grunt.log.ok(propertyDefinition);
+
+                // generate property data
+                propertyDefinitionWithoutObjectName = propertyDefinition
+                    .replace(group.pattern, '')
+                    .replace(/^\./, '');
+                propertyName = propertyDefinitionWithoutObjectName
+                    .replace(/^prototype\./i, '');
+
+                data = {
+                    name:     propertyName,
+
+                    // string -> "string"
+                    // true   -> true
+                    source:   typeof jsonData[i] === 'string' ?
+                            '"' + jsonData[i].replace(/"/g, '\\"') + '"' :
+                            '' + jsonData[i],
+                    comment:  '',
+
+                    type:     'object',
+                    isPublic: propertiesUtils.isPublic(propertyName),
+                    isFromPrototype: propertiesUtils.isFromPrototype(propertyDefinitionWithoutObjectName),
+                    filePath: filePath
+                };
+
+                // add property data to prototype or inline array
+                group[(data.isFromPrototype ? 'prototypeProperties' : 'inlineProperties')].push(data);
+            } else {
+                // is object
+                // add attributeName to path and try to add
+                addJSONProperties(jsonData[i], propertiesGroups, filePath, currentNamesPath ? currentNamesPath + '.' + i : i);
+            }
+        }
+    }
+
+
+    /**
      * Read methods from src files
      * @param src
      * @param currentOptions
@@ -108,8 +181,21 @@ module.exports = function (grunt) {
 
         grunt.util._.difference(src, grunt.file.expand(options.initFiles)).forEach(function (filePath) {
 
+            var jsonData;
 
-            // find each property at each src file
+            // add properties from JSON|YAML
+            if ((/\.json/i).test(filePath)) {
+                jsonData = grunt.file.readJSON(filePath);
+                addJSONProperties(jsonData, propertiesGroups, filePath);
+                return;
+            }
+            if ((/\.ya?ml/i).test(filePath)) {
+                jsonData = grunt.file.readYAML(filePath);
+                addJSONProperties(jsonData, propertiesGroups, filePath);
+                return;
+            }
+
+            // find each property at each JS file
             text = grunt.file.read(filePath, {encoding: 'utf8'});
             while ((sourceData = patterns.propertiesPattern.exec(text))) {
 

@@ -1,0 +1,7 @@
+App:
+  Models:
+    WithProperties:
+      prototype:
+        yamlProperty:
+          secondDepthProperty: true
+        anotherYamlProperty: 'value'

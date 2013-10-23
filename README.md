@@ -116,7 +116,7 @@ grunt.initConfig({
             },
 
             src: [
-                'models/{**/,}*.js',
+                'models/{**/,}*.{json,yaml,yml,js}',
                 'View/{**/,}*.js'
             ],
             dest: 'build/properties.js'
@@ -124,6 +124,13 @@ grunt.initConfig({
     }
 };
 ```
+
+#### src
+Type: `Array`
+Default value: `[]`
+
+Source files. Task can parse JS, JSON or YAML files
+
 
 #### options.base
 Type: `String`

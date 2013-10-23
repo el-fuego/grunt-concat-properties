@@ -52,7 +52,7 @@ module.exports = function (grunt) {
                 },
 
                 src:  [
-                    'test/App/models/{**/,}*.js',
+                    'test/App/models/{**/,}*.{js,json,yaml,yml}',
                     'test/App/View/{**/,}*.js'
                 ],
                 dest: 'test/App/build/properties.js'

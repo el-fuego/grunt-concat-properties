@@ -14,13 +14,19 @@ App.Models.WithProperties.prototype = {
 
     secondPropertyAtFolder: ['test'],
 
+    jsonProperty: {
+        secondDepthProperty: null
+    },
+
+    anotherJsonProperty: "value",
+
     firstPoperty: {
         secondDepthProperty: function () {
             'use strict';
         }
     },
 
-    secondPoperty: /(test{1,2})[a-z0-9]+/gi,
+    secondProperty: /(test{1,2})[a-z0-9]+/gi,
 
 
     multilineFunction: function (test) {
@@ -43,7 +49,13 @@ App.Models.WithProperties.prototype = {
     multilineFunctionWithInlineComment: function (test) {
         'use strict';
         return !!test;
-    }
+    },
+
+    yamlProperty: {
+        secondDepthProperty: true
+    },
+
+    anotherYamlProperty: "value"
 };
 
 App.Models.WithoutProperties = function () {

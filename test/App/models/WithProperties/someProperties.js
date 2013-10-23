@@ -3,7 +3,7 @@ App.Models.WithProperties.prototype.firstPoperty = {
         'use strict';
     }
 };
-App.Models.WithProperties.prototype.secondPoperty = /(test{1,2})[a-z0-9]+/gi;
+App.Models.WithProperties.prototype.secondProperty = /(test{1,2})[a-z0-9]+/gi;
 
 App.Models.WithProperties.prototype.multilineFunction = function (test) {
     'use strict';
