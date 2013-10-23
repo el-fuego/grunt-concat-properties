@@ -39,7 +39,7 @@ module.exports = function (grunt) {
                 ''
             ).replace(/^\/+/, ''));
 
-            grunt.log.verbose(objectName);
+            grunt.verbose(objectName);
 
             groups.push({
                 objectName:          objectName,
@@ -73,7 +73,7 @@ module.exports = function (grunt) {
             return;
         }
 
-        grunt.log.verbose(sourceData[2]);
+        grunt.verbose(sourceData[2]);
 
         // generate property data
         propertyDefinitionWithoutObjectName = sourceData[2].replace(group.pattern, '').replace(/^\./, '');
@@ -130,7 +130,7 @@ module.exports = function (grunt) {
                     return;
                 }
 
-                grunt.log.verbose(propertyDefinition);
+                grunt.verbose(propertyDefinition);
 
                 // generate property data
                 propertyDefinitionWithoutObjectName = propertyDefinition
