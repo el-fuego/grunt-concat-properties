@@ -39,12 +39,12 @@ module.exports = function (grunt) {
                 ''
             ).replace(/^\/+/, ''));
 
-            grunt.log.writeln(objectName);
+            grunt.log.verbose(objectName);
 
             groups.push({
                 objectName:          objectName,
                 initFilePath:        path,
-                pattern:             new RegExp('^' + utils.toRegExpText(objectName), 'i'),
+                pattern:             new RegExp('^' + utils.toRegExpText(objectName) + '\\.', 'i'),
                 inlineProperties:    [],
                 prototypeProperties: []
             });
@@ -73,7 +73,7 @@ module.exports = function (grunt) {
             return;
         }
 
-        grunt.log.ok(sourceData[2]);
+        grunt.log.verbose(sourceData[2]);
 
         // generate property data
         propertyDefinitionWithoutObjectName = sourceData[2].replace(group.pattern, '').replace(/^\./, '');
@@ -130,7 +130,7 @@ module.exports = function (grunt) {
                     return;
                 }
 
-                grunt.log.ok(propertyDefinition);
+                grunt.log.verbose(propertyDefinition);
 
                 // generate property data
                 propertyDefinitionWithoutObjectName = propertyDefinition
