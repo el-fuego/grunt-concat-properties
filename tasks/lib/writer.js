@@ -47,8 +47,8 @@ module.exports = function (grunt) {
             utils.addQuotes(property.name.split('.').pop()) +
             ': ' +
             (
-                typeof options.sourceModifier === 'function' ?
-                        options.sourceModifier(property.source, property) :
+                typeof options.sourceProcessor === 'function' ?
+                        options.sourceProcessor(property.source, property) :
                         property.source
             );
     }
