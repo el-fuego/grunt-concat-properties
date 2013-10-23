@@ -23,6 +23,7 @@ module.exports = function (grunt) {
     function addToJSONRecursively(contextNames, data, obj) {
         var currentContexName = contextNames.shift();
 
+        // last name
         if (!contextNames.length) {
             obj[currentContexName] = data;
             return;
@@ -41,11 +42,12 @@ module.exports = function (grunt) {
      * @returns {string}
      */
     function propertyToString(property) {
+
         return property.comment +
-            utils.addQuotes(property.name).replace(/^[^.]+\./g, '') +
+            utils.addQuotes(property.name.split('.').pop()) +
             ': ' +
             (
-                typeof options.sourceModifier === 'funcction' ?
+                typeof options.sourceModifier === 'function' ?
                         options.sourceModifier(property.source, property) :
                         property.source
             );
@@ -61,7 +63,6 @@ module.exports = function (grunt) {
             properties = [];
 
         for (i in obj) {
-
             properties.push(
                 typeof obj[i] === 'string' ?
                         obj[i] :

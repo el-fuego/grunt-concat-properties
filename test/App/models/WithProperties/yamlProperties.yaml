@@ -3,5 +3,6 @@ App:
     WithProperties:
       prototype:
         yamlProperty:
-          secondDepthProperty: true
+          secondDepthProperty:
+            thirdDepthProperty: true
         anotherYamlProperty: 'value'

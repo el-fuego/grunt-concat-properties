@@ -52,7 +52,9 @@ App.Models.WithProperties.prototype = {
     },
 
     yamlProperty: {
-        secondDepthProperty: true
+        secondDepthProperty: {
+            thirdDepthProperty: true
+        }
     },
 
     anotherYamlProperty: "value"
