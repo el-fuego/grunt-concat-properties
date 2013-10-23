@@ -182,6 +182,6 @@ module.exports = function (grunt) {
 
         });
         grunt.file.write(dest, propertiesFileText);
-        grunt.log.write(dest).ok();
+        grunt.log.write(dest + '...').ok();
     };
 };
