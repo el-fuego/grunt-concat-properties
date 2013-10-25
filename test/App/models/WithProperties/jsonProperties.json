@@ -6,7 +6,9 @@
                     "jsonProperty": {
                         "secondDepthProperty": null
                     },
-                    "anotherJsonProperty": "value"
+                    "anotherJsonProperty": "value",
+                    "emptyObject": {},
+                    "emptyArray":  []
                 }
             }
         }

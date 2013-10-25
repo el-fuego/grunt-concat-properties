@@ -118,7 +118,7 @@ module.exports = function (grunt) {
         for (i in jsonData) {
 
             // add to group if is a simply object
-            if (jsonData[i] instanceof Array || jsonData[i] == null || typeof jsonData[i] !== 'object') {
+            if (jsonData[i] instanceof Array || jsonData[i] == null || typeof jsonData[i] !== 'object' || grunt.util._.isEmpty(jsonData[i])) {
 
                 // find group
                 propertyDefinition = (currentNamesPath ? currentNamesPath + '.' + i : i)
@@ -141,12 +141,6 @@ module.exports = function (grunt) {
 
                 data = {
                     name:     propertyName,
-
-                    // string -> "string"
-                    // true   -> true
-                    source:   typeof jsonData[i] === 'string' ?
-                            '"' + jsonData[i].replace(/"/g, '\\"') + '"' :
-                            '' + jsonData[i],
                     comment:  '',
 
                     type:     'object',
@@ -154,6 +148,23 @@ module.exports = function (grunt) {
                     isFromPrototype: propertiesUtils.isFromPrototype(propertyDefinitionWithoutObjectName),
                     filePath: filePath
                 };
+
+
+                // string -> "string"
+                // true   -> true
+                switch (typeof jsonData[i]) {
+                case 'object':
+                    if (jsonData[i] != null) {
+                        data.source = JSON.stringify(jsonData[i]);
+                    }
+                    break;
+                case 'string':
+                    data.source = '"' + jsonData[i].split('"').join('\\"') + '"';
+                    break;
+                }
+                if (data.source === undefined) {
+                    data.source = '' + jsonData[i];
+                }
 
                 // add property data to prototype or inline array
                 group[(data.isFromPrototype ? 'prototypeProperties' : 'inlineProperties')].push(data);

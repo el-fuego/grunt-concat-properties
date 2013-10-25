@@ -1,7 +1,7 @@
 {
   "name": "grunt-concat-properties",
   "description": "Grunt plugin for concating JavaScript models methods from many files",
-  "version": "0.0.13",
+  "version": "0.0.14",
   "homepage": "https://github.com/el-fuego/grunt-concat-properties.git",
   "author": {
     "name": "Yuriy Pulyaev",

@@ -20,6 +20,10 @@ App.Models.WithProperties.prototype = {
 
     anotherJsonProperty: "value",
 
+    emptyObject: {},
+
+    emptyArray: [],
+
     firstPoperty: {
         secondDepthProperty: function () {
             'use strict';
@@ -57,7 +61,9 @@ App.Models.WithProperties.prototype = {
         }
     },
 
-    anotherYamlProperty: "value"
+    anotherYamlProperty: "value",
+
+    arrayProperty: ["text", true, null]
 };
 
 App.Models.WithoutProperties = function () {

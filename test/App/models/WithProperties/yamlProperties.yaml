@@ -6,3 +6,7 @@ App:
           secondDepthProperty:
             thirdDepthProperty: true
         anotherYamlProperty: 'value'
+        arrayProperty:
+          - text
+          - true
+          - null
